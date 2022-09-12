@@ -1,5 +1,6 @@
 cmake ==3.24.1.1
 dlib== 19.24.0
+dlib-19.22.99-cp310-cp310-win_amd64
 numpy==1.23.2
 typing_extensions==4.1.1
 protobuf~=3.19.0
