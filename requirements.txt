@@ -8,3 +8,4 @@ streamlit==1.12.2
 streamlit_authenticator==0.2.1
 streamlit_option_menu==0.3.2
 streamlit_webrtc==0.43.4
+dlib-19.22.99-cp310-cp310-win_amd64.whl
