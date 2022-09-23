@@ -42,10 +42,10 @@ def adding_Entities():
     with col2:
         button = st.button("Submit")
         if button:
-            cv2.imwrite(f'Entities_Images/{fname}_{lname}.jpg', cv2_img)
-            img = f'Entities_Images/{fname}_{lname}.jpg'
+            cv2.imwrite(f'Entities_Images/{Id}.jpg', cv2_img)
+            img = f'Entities_Images/{Id}.jpg'
             dbp.add_entites(fname, lname, Id, Class, img[16:len(img)])
-            dbp.insert_image(img, fname, lname)
+            dbp.insert_image(img,Id)
             st.balloons()
             st.session_state.ss = True
 

@@ -51,12 +51,12 @@ def get_admin_data(field):
 
 def add_entites(fname,lname,id,dept,img):
         data = {'first_name': fname, 'last_name': lname,'Id': id, 'Department': dept,'Image':img}
-        return db.child("Entities").push(data)
+        return db.child("Entities").child(f"{id}").set(data)
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-def insert_image(image,fname,lname):
-        return storage.child(f"Entities_Images/{fname}_{lname}.jpg").put(image)
+def insert_image(image,id):
+        return storage.child(f"Entities_Images/{id}.jpg").put(image)
 
 
 
