@@ -60,6 +60,19 @@ def insert_image(image,id):
 
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+
+def get_info_of_entities(ID):
+        entitiy = db.child("Entities").child(ID).get()
+        val = list(entitiy.val().values())
+        return val
+
+#  ---------------------------------------------------------------------------------------------------------------------
+# vals = get_info_of_entities(10149)
+# print(vals)
+
+
+
 
 
 
@@ -91,8 +104,8 @@ def insert_image(image,id):
 
 
 ### Adding admins to database
-import streamlit_authenticator as stauth
-
+# import streamlit_authenticator as stauth
+#
 # admins = ["surajkumar yadav","sky"]
 # email_id = ["suraj04@gmail.com","sy123@gmail.com"]
 # passwords =["abcd1234","asdfghjkl"]
@@ -100,7 +113,7 @@ import streamlit_authenticator as stauth
 #
 # for (admin,e_id,hashed_password) in zip(admins, email_id, hashed_passwords):
 #         insert_admin(admin,e_id,hashed_password)
-
+#
 # admins = ["Admin_01","Admin_02"]
 # email_id = ["admin01@gmail.com","admin02@gmail.com"]
 # passwords =["admin01","admin02"]

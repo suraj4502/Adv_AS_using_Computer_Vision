@@ -3,16 +3,12 @@ import pandas as pd
 import numpy as np
 import streamlit_authenticator as stauth
 from streamlit_option_menu import option_menu
-import random
-from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration,VideoTransformerBase
-import av
-import threading
+import csv
+from datetime import datetime, timedelta
 
 import cv2
-from PIL import Image
 import face_recognition
 import os
-from datetime import datetime
 
 
 import database as dbp
@@ -90,19 +86,23 @@ if authentication_status:
               encodeList.append(encode)
           return encodeList
 
+
+
+
+
       def markAttendence(Id):
-          with open('Attendance.csv', 'r+') as f:
-              myDataList = f.readlines()
-              nameList = []
-              for line in myDataList:
-                  entry = line.split(',')
-                  nameList.append(entry[0])
-              if name not in nameList:
-                  now = datetime.now()
-                  dtString = now.strftime('%H:%M')
-                  today = datetime.today()
-                  d1 = today.strftime("%d/%m/%Y")
-                  f.writelines(f'\n{Id},{dtString},{d1}')
+          field_names = ["ID",'Fname','lname', 'Department', 'Time','Date']
+          vals = dbp.get_info_of_entities(Id)
+          ct = datetime.now()
+          ct = ct.strftime('%H:%M')
+          cd = datetime.today()
+          cd = cd.strftime("%d/%m/%Y")
+          dict = {"ID":vals[1],"Fname":vals[3],"lname":vals[4],"Department":vals[0],"Time":ct,"Date":cd}
+
+          with open('data.csv', 'a') as csv_file:
+              dict_object = csv.DictWriter(csv_file, fieldnames=field_names)
+
+              dict_object.writerow(dict)
 
 
       encodeListKnown = findEncodings(images)
@@ -153,7 +153,73 @@ if authentication_status:
       hp.adding_Entities()
 
   if selected =='Data Analysis':
-      st.write("data")
+      import plotly.express as px
+      df = pd.read_csv('data.csv')
+      df.ID= df.ID.astype('str').str.replace(".0","",regex=False)
+      df = df.dropna()
+      da_option = st.radio("Reports :",["Today's","Particular Date","overall"],horizontal=True)
+      if da_option == "Today's":
+          st.header("Today's Report :")
+          df_today = df[df["Date"] == datetime.today().strftime("%d/%m/%Y")]
+          df_today.reset_index(inplace=True)
+          df_today.drop("index",axis=1,inplace=True)
+          df_today.drop_duplicates(subset=["ID","Date"],ignore_index=True,inplace=True)
+          st.dataframe(df_today)
+          st.info(f"###### Total no. of students : {df_today.ID.count()}.")
+
+      if da_option=="Particular Date":
+          date_input = st.date_input("Enter the Date:")
+          date_input = date_input.strftime("%d/%m/%Y")
+          st.header(f"{date_input} Report :")
+          df_y = df[df["Date"] ==date_input]
+          df_y.reset_index(inplace=True)
+          df_y.drop("index", axis=1, inplace=True)
+          df_y.drop_duplicates(subset=["Time"],ignore_index=True,inplace=True)
+          st.dataframe(df_y)
+          st.info(f"###### Total no. of students : {df_y.ID.count()}.")
+
+      elif da_option=="overall":
+          st.header("Overall Report :")
+          df.reset_index(inplace=True)
+          df.drop("index", axis=1, inplace=True)
+          df.drop_duplicates(subset=["ID","Date"],ignore_index=True,inplace=True)
+          st.dataframe(df)
+          st.markdown("---")
+          st.header("Histogram Of the Data.")
+          ft_btn = st.checkbox("In depth.")
+          fig = px.histogram(df,x='Date',title="Daywise Attendence.",color_discrete_sequence= ["#CC3636"])
+          fig.update_layout(
+            xaxis=dict(showgrid=False),   #disabling grids
+            yaxis=dict(showgrid=False),
+
+            showlegend = False,
+              title_x=0.4,  # adjusting title
+              title_font=dict(  # working with font
+                  family="Helvetica",
+                  size=20,
+              )
+            )
+          fig.update_xaxes(rangeslider_visible=False)
+          st.plotly_chart(fig)
+
+          if ft_btn:
+              fig = px.histogram(df, x='Date', title="Daywise Attendence[Indepth].", color="ID")
+              fig.update_layout(
+                  xaxis=dict(showgrid=False),  # disabling grids
+                  yaxis=dict(showgrid=False),
+
+                  showlegend=True,
+                  title_x=0.4,  # adjusting title
+                  title_font=dict(  # working with font
+                      family="Helvetica",
+                      size=20,
+                  )
+              )
+              fig.update_xaxes(rangeslider_visible=False)
+              st.plotly_chart(fig)
+
+
+
 
 
 
