@@ -58,6 +58,9 @@ def add_entites(fname,lname,id,dept,img):
 def insert_image(image,id):
         return storage.child(f"Entities_Images/{id}.jpg").put(image)
 
+def update_data():
+        return storage.child("Data/data.csv").put("finaldata.csv")
+
 
 
 # ----------------------------------------------------------------------------------------------------------------------

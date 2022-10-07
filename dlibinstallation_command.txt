@@ -1,0 +1,6 @@
+conda install -c conda-forge dlib
+ 
+
+or install the cascadefile using
+pip install "haarcascade_frontalface_default.xml"
+

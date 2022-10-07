@@ -70,12 +70,12 @@ if authentication_status:
       images = []
       classNames = []
       myList = os.listdir(path)
-      print(myList)
+      # print(myList)
       for cl in myList:
           curImg = cv2.imread(f'{path}/{cl}')
           images.append(curImg)
           classNames.append(os.path.splitext(cl)[0])
-      print(classNames)
+      # print(classNames)
 
 
       def findEncodings(images):
@@ -105,6 +105,7 @@ if authentication_status:
               dict_object.writerow(dict)
 
 
+
       encodeListKnown = findEncodings(images)
 
       if 'id_key' not in st.session_state:
@@ -125,18 +126,21 @@ if authentication_status:
               # print(encode_test)
               # print(len(encodeListKnown))
               face_dis_list = []
-              for i in encodeListKnown:
-                  match = face_recognition.compare_faces(i, encode_test)
-                  face_dis = face_recognition.face_distance(i, encode_test)
-                  face_dis_list.append(face_dis)
-              # print(face_dis_list)
-              index = np.argmin(face_dis_list)
-              Id = classNames[index]
-              if input_id==Id:
-                  markAttendence(input_id)
-                  st.success("Attendence Marked")
-              else:
-                  st.error("Invalid Credentials...")
+              try:
+                  for i in encodeListKnown:
+                      match = face_recognition.compare_faces(i, encode_test)
+                      face_dis = face_recognition.face_distance(i, encode_test)
+                      face_dis_list.append(face_dis)
+                  # print(face_dis_list)
+                  index = np.argmin(face_dis_list)
+                  Id = classNames[index]
+                  if input_id==Id:
+                      markAttendence(input_id)
+                      st.success("Attendence Marked")
+                  else:
+                      st.error("Invalid Credentials...")
+              except:
+                    st.info("###### Please click a clear Image.")
 
       main(st.session_state.id_key,st.session_state.image_key)
       st.markdown("---")
@@ -149,8 +153,11 @@ if authentication_status:
           st.session_state.image_key = st.session_state.image_key +2
           main(st.session_state.id_key, st.session_state.image_key)
 
+
+
   if selected =='Add a new student/employee':
       hp.adding_Entities()
+
 
   if selected =='Data Analysis':
       import plotly.express as px
@@ -217,6 +224,9 @@ if authentication_status:
               )
               fig.update_xaxes(rangeslider_visible=False)
               st.plotly_chart(fig)
+
+          df.to_csv('finaldata.csv')
+          dbp.update_data()
 
 
 
