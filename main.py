@@ -15,10 +15,17 @@ import database as dbp
 import helper as hp
 
 
-st.set_page_config(page_title="A Sk_Y product", page_icon="🌄", layout="centered")
-st.title("Advanced Attendence System 📋..")
+st.set_page_config(page_title="A Sk_Y product", page_icon="🐼", layout="centered")
+st.title("Advanced Attendance System 📋..")
 st.markdown("---")
-
+hide_st_style = """
+            <style>
+            
+            footer {visibility: hidden;}
+            
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
 
 
 # ---Authentication---
@@ -39,12 +46,21 @@ for un, name, pw in zip(usernames, names, passwords):
 authenticator = stauth.Authenticate(credentials,'ck', 'rk',cookie_expiry_days=5)
 name,authentication_status, username = authenticator.login("Admin login😎","main")
 
+
+
 #   ---Sidebar---
 st.sidebar.header(f"Welcome {name}.")
 st.sidebar.markdown("---")
 
 if authentication_status ==False:
   st.error("Invalid Credentials🙄.")
+
+# if authentication_status:
+#     try:
+#         if authenticator.reset_password(username, 'Reset password'):
+#             st.success('Password modified successfully')
+#     except Exception as e:
+#         st.error(e)
 
 # if authentication_status==None:
 #   st.warning("Enter your Credentials.")
@@ -255,6 +271,35 @@ if authentication_status:
 
 
 
+
+
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+st.sidebar.markdown("\n")
+
+
+
+
+
+
+
+st.sidebar.markdown("- Developed by `SKY`.   ⇨[github ](https://github.com/suraj4502), "
+                    "[Linkedin](https://www.linkedin.com/in/surajkumar-yadav-6ab2011a4/),"
+                    " [Ig](https://www.instagram.com/suraj452/).")
 
 
 
